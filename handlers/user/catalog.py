@@ -18,7 +18,11 @@ from loader import dp
 
 @dp.message_handler(IsUser(), text=catalog)
 async def process_catalog(message: Message):
-    await message.answer('Выберите раздел, чтобы вывести список товаров:',
+    categories = db.fetchall('SELECT * FROM categories')
+    if len(categories) == 0:
+        await message.answer('Каталог пуст')
+    else:
+        await message.answer('Выберите раздел, чтобы вывести список товаров:',
                          reply_markup=categories_markup())
 
 

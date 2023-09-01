@@ -16,9 +16,10 @@ async def process_orders(message: Message):
 
 async def order_answer(message, orders):
 
+    #products_name = db.fetchall('SELECT idx AND title FROM products')
     res = ''
 
     for order in orders:
-        res += f'Заказ <b>№{order[3]}</b>\n\n'
+        res += f'Заказ: <b>{order[3]}</b>\nПокупатель: <b>{order[1]}</b>\nАдрес: <b>{order[2]}</b>\n\n'
 
     await message.answer(res)

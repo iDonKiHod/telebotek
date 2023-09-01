@@ -241,7 +241,7 @@ async def process_confirm(message: Message, state: FSMContext):
 
     async with state.proxy() as data:
         cid = message.chat.id
-        products = [idx + '=' + str(quantity)
+        products = [idx + ' = ' + str(quantity) + ' шт.'
                     for idx, quantity in db.fetchall('''SELECT idx, quantity FROM cart
         WHERE cid=?''', (cid,))]
 
@@ -251,7 +251,7 @@ async def process_confirm(message: Message, state: FSMContext):
         db.query('DELETE FROM cart WHERE cid=?', (cid,))
 
         await message.answer(
-            'Спасибо!) Передал ваш заказ в обработку 🚀\nВаше имя: <b>' + data[
+            'Спасибо!) Передал ваш заказ в обработку 🚀\n\nВаше имя: <b>' + data[
                 'name'] + '</b>\nВаш адрес: <b>' + data['address'] + '</b>',
             reply_markup=markup)
 

@@ -5,6 +5,9 @@ from data.config import ADMINS
 from aiogram import executor
 from logging import basicConfig, INFO
 
+from aiogram.types import Message
+from filters import IsAdmin, IsUser
+
 from loader import dp, db, bot
 import handlers
 
@@ -17,14 +20,16 @@ admin_message = 'Админ'
 async def cmd_start(message: types.Message):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
 
-    markup.row(user_message, admin_message)
+    cid = message.chat.id
+
+    if cid in ADMINS:
+        markup.row(user_message, admin_message)
 
     await message.answer('''Привет! 👋
 
-🤖 Я бот-магазин по подаже товаров любой категории.
+🤖 Меня зовут Серёжа, я ваш личный бот-помощник для формирования заказа в онлайн-магазине товаров для охотников "Привада"
 
-🛍️ Чтобы перейти в каталог и выбрать приглянувшиеся 
-товары возпользуйтесь командой /menu.
+🛍️ Чтобы перейти в каталог и выбрать приглянувшиеся товары возпользуйтесь командой /menu.
 
 ❓ Возникли вопросы? Не проблема! Команда /sos поможет 
 связаться с админами, которые постараются как можно быстрее откликнуться.
@@ -34,20 +39,20 @@ async def cmd_start(message: types.Message):
 @dp.message_handler(text=admin_message)
 async def admin_mode(message: types.Message):
     cid = message.chat.id
-    if cid not in ADMINS:
-        ADMINS.append(cid)
+    #if cid not in ADMINS:
+    #    ADMINS.append(cid)
 
-    await message.answer('Включен админский режим.',
+    await message.answer('Включен режим администратора.',
                          reply_markup=ReplyKeyboardRemove())
 
 
 @dp.message_handler(text=user_message)
 async def user_mode(message: types.Message):
     cid = message.chat.id
-    if cid in ADMINS:
-        ADMINS.remove(cid)
+    #if cid in ADMINS:
+    #    ADMINS.remove(cid)
 
-    await message.answer('Включен пользовательский режим.',
+    await message.answer('Включен режим пользователя.',
                          reply_markup=ReplyKeyboardRemove())
 
 
